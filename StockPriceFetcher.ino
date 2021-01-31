@@ -32,6 +32,7 @@ value values[VALUE_COUNT] = {
 HTTPClient https;
 std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
 SSD1306Wire display(0x3c, SDA, SCL, DISPLAY_GEOMETRY);
+const char * endpoint = "https://financialmodelingprep.com/api/v3/quote/" STOCK_SYMBOL "?apikey=" APIKEY;
 
 void drawRow(int row, const char* title, double value) {
   char buffer [16] {};
@@ -44,7 +45,7 @@ void drawRow(int row, const char* title, double value) {
 }
 
 bool update() {
-  if (!https.begin(*client, "https://financialmodelingprep.com/api/v3/quote/" STOCK_SYMBOL "?apikey=" APIKEY)) {
+  if (!https.begin(*client, endpoint)) {
     Serial.println("Failed to begin API request");
     return false;
   }
@@ -56,22 +57,22 @@ bool update() {
     return false;
   }
 
-  String response = https.getString();
+  String body = https.getString();
   https.end();
 
-  StaticJsonDocument<1000> data;
-  DeserializationError error = deserializeJson(data, response);
+  StaticJsonDocument<1000> json;
+  DeserializationError error = deserializeJson(json, body);
   if (error) {
     Serial.println("Failed to deseiralice JSON:");
-    Serial.println(response);
+    Serial.println(body);
     return false;
   }
 
   Serial.println("Response: ");
-  serializeJsonPretty(data, Serial);
+  serializeJsonPretty(json, Serial);
   Serial.println();
 
-  for (JsonVariant item : data.as<JsonArray>()) {
+  for (JsonVariant item : json.as<JsonArray>()) {
     String exchange = item["exchange"];
     if (exchange == EXCHANGE) {
       display.clear();
