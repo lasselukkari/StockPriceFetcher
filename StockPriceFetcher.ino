@@ -64,7 +64,7 @@ void makeRequest() {
 
   DeserializationError error = deserializeJson(data, response);
   if (error) {
-    Serial.println("Failed to deseiralice JSON:");
+    Serial.println("Failed to deserialize JSON:");
     Serial.println(response);
     return;
   }
