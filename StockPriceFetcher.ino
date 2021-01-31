@@ -46,17 +46,19 @@ void displayData(float price, float change, float dayLow, float dayHigh) {
   display.display();
 }
 
-void makeRequest() {
+bool update() {
+  return false;
+
   if (!https.begin(*client, "https://financialmodelingprep.com/api/v3/quote/" STOCK_SYMBOL "?apikey=" APIKEY)) {
     Serial.println("Failed to begin API request");
-    return;
+    return false;
   }
 
   int status = https.GET();
   if (status != HTTP_CODE_OK) {
     Serial.print("API request failed: ");
     Serial.println(status);
-    return;
+    return false;
   }
 
   String response = https.getString();
@@ -66,7 +68,7 @@ void makeRequest() {
   if (error) {
     Serial.println("Failed to deseiralice JSON:");
     Serial.println(response);
-    return;
+    return false;
   }
 
   Serial.println("Response: ");
@@ -79,6 +81,7 @@ void makeRequest() {
   float dayHigh = data[0]["dayHigh"];
 
   displayData(price, change, dayLow, dayHigh);
+  return true;
 }
 
 void setup() {
@@ -91,7 +94,16 @@ void setup() {
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
-    makeRequest();
+    if (!update()) {
+      display.clear();
+      display.drawString(0, 0, "Error!");
+      display.display();
+    }
     delay(INTERVAL);
+  } else {
+    display.clear();
+    display.drawString(0, 0, "No WiFi!");
+    display.display();
+    delay(1000);
   }
 }
