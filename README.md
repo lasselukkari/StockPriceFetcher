@@ -1,5 +1,5 @@
 # StockPriceFetcher
-Fetch stock price by symbol using ESP8266.
+Fetch stock price by symbol and exchange using ESP8266.
 
 The price is requested using financialmodelingprep.com free API.
 
