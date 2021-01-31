@@ -10,7 +10,7 @@
 #define STOCK_SYMBOL "GME"
 #define EXCHANGE "NYSE"
 #define INTERVAL 300000
-#define SCREEN_WIDTH 64
+#define DISPLAY_WIDTH 64
 #define DISPLAY_GEOMETRY GEOMETRY_64_48
 #define DIGIT_COUNT 4
 #define FONT_SIZE 10
@@ -25,8 +25,8 @@ struct value {
 value values[VALUE_COUNT] = {
   {title: "Price", key: "price"},
   {title: "Chg", key: "changesPercentage"},
-  {title: "High", key: "dayHigh"},
-  {title: "Low",  key: "dayLow"}
+  {title: "Low",  key: "dayLow"},
+  {title: "High", key: "dayHigh"}
 };
 
 HTTPClient https;
@@ -40,7 +40,7 @@ void drawRow(int row, const char* title, double value) {
   display.setTextAlignment(TEXT_ALIGN_LEFT);
   display.drawString(0, offset, title);
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
-  display.drawString(SCREEN_WIDTH, offset, buffer);
+  display.drawString(DISPLAY_WIDTH, offset, buffer);
 }
 
 bool update() {
