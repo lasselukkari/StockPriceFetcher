@@ -7,7 +7,7 @@
 #define WIFI_SSID ""
 #define WIFI_PASSWORD ""
 #define APIKEY ""
-#define STOCK_SYMBOL "U"
+#define STOCK_SYMBOL "GME"
 #define INTERVAL 300000
 
 HTTPClient https;
