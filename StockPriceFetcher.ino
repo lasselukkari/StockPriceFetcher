@@ -26,7 +26,7 @@ void makeRequest() {
   StaticJsonDocument<1000> doc;
   DeserializationError error = deserializeJson(doc, https.getString());
   if (error) {
-    Serial.println("Failed to deseiralice JSON");
+    Serial.println("Failed to deserialize JSON");
     return;
   }
 
