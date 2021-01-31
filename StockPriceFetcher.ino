@@ -8,11 +8,11 @@
 #define WIFI_PASSWORD ""
 #define APIKEY ""
 #define STOCK_SYMBOL "GME"
+#define EXCHANGE "NYSE"
 #define INTERVAL 300000
 
 HTTPClient https;
 std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
-StaticJsonDocument<1000> data;
 SSD1306Wire display(0x3c, SDA, SCL, GEOMETRY_64_48);
 char buffer [33] {};
 
@@ -62,6 +62,7 @@ bool update() {
   String response = https.getString();
   https.end();
 
+  StaticJsonDocument<1000> data;
   DeserializationError error = deserializeJson(data, response);
   if (error) {
     Serial.println("Failed to deseiralice JSON:");
@@ -73,13 +74,20 @@ bool update() {
   serializeJsonPretty(data, Serial);
   Serial.println();
 
-  float price = data[0]["price"];
-  float change = data[0]["changesPercentage"];
-  float dayLow = data[0]["dayLow"];
-  float dayHigh = data[0]["dayHigh"];
+  for (JsonVariant item : data.as<JsonArray>()) {
+    String exchange = item["exchange"];
+    if (exchange == EXCHANGE) {
+      float price = item["price"];
+      float change = item["changesPercentage"];
+      float dayLow = item["dayLow"];
+      float dayHigh = item["dayHigh"];
 
-  displayData(price, change, dayLow, dayHigh);
-  return true;
+      displayData(price, change, dayLow, dayHigh);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void setup() {
