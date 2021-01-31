@@ -47,8 +47,6 @@ void displayData(float price, float change, float dayLow, float dayHigh) {
 }
 
 bool update() {
-  return false;
-
   if (!https.begin(*client, "https://financialmodelingprep.com/api/v3/quote/" STOCK_SYMBOL "?apikey=" APIKEY)) {
     Serial.println("Failed to begin API request");
     return false;
