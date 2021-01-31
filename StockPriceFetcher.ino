@@ -16,29 +16,29 @@ StaticJsonDocument<1000> data;
 SSD1306Wire display(0x3c, SDA, SCL, GEOMETRY_64_48);
 char buffer [33] {};
 
-void displayData(float price, float open, float dayLow, float dayHigh) {
+void displayData(float price, float change, float dayLow, float dayHigh) {
   display.clear();
 
   display.setTextAlignment(TEXT_ALIGN_LEFT);
-  gcvt(price, 5, buffer);
+  gcvt(price, 4, buffer);
   display.drawString(0, 0, "Price");
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
   display.drawString(64, 0, buffer);
 
   display.setTextAlignment(TEXT_ALIGN_LEFT);
-  gcvt(open, 5, buffer);
-  display.drawString(0, 10, "Open");
+  gcvt(change, 4, buffer);
+  display.drawString(0, 10, "Chg");
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
   display.drawString(64, 10, buffer);
 
   display.setTextAlignment(TEXT_ALIGN_LEFT);
-  gcvt(dayHigh, 5, buffer);
+  gcvt(dayHigh, 4, buffer);
   display.drawString(0, 20, "High");
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
   display.drawString(64, 20, buffer);
 
   display.setTextAlignment(TEXT_ALIGN_LEFT);
-  gcvt(dayLow, 5, buffer);
+  gcvt(dayLow, 4, buffer);
   display.drawString(0, 30, "Low");
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
   display.drawString(64, 30, buffer);
@@ -64,7 +64,7 @@ void makeRequest() {
 
   DeserializationError error = deserializeJson(data, response);
   if (error) {
-    Serial.println("Failed to deserialize JSON:");
+    Serial.println("Failed to deseiralice JSON:");
     Serial.println(response);
     return;
   }
@@ -74,11 +74,11 @@ void makeRequest() {
   Serial.println();
 
   float price = data[0]["price"];
-  float open = data[0]["open"];
+  float change = data[0]["changesPercentage"];
   float dayLow = data[0]["dayLow"];
   float dayHigh = data[0]["dayHigh"];
 
-  displayData(price, open, dayLow, dayHigh);
+  displayData(price, change, dayLow, dayHigh);
 }
 
 void setup() {
