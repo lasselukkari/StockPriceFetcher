@@ -13,7 +13,7 @@
 #define DISPLAY_WIDTH 64
 #define DISPLAY_GEOMETRY GEOMETRY_64_48
 #define DIGIT_COUNT 4
-#define FONT_SIZE 10
+#define ROW_HEIGHT 12
 #define FONT ArialMT_Plain_10
 #define VALUE_COUNT 4
 
@@ -37,7 +37,7 @@ const char * endpoint = "https://financialmodelingprep.com/api/v3/quote/" STOCK_
 void drawRow(int row, const char* title, double value) {
   char buffer [16] {};
   gcvt(value, DIGIT_COUNT, buffer);
-  int offset = row * FONT_SIZE;
+  int offset = row * ROW_HEIGHT;
   display.setTextAlignment(TEXT_ALIGN_LEFT);
   display.drawString(0, offset, title);
   display.setTextAlignment(TEXT_ALIGN_RIGHT);
