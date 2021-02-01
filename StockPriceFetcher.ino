@@ -34,7 +34,7 @@ std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
 SSD1306Wire display(0x3c, SDA, SCL, DISPLAY_GEOMETRY);
 const char * endpoint = "https://financialmodelingprep.com/api/v3/quote/" STOCK_SYMBOL "?apikey=" APIKEY;
 
-void drawRow(int row, const char* title, double value) {
+void drawRow(int row, const char* title, float value) {
   char buffer [16] {};
   gcvt(value, DIGIT_COUNT, buffer);
   int offset = row * ROW_HEIGHT;
