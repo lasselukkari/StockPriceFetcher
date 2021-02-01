@@ -58,7 +58,7 @@ const unsigned char diamondHands [] = {
   0xF0, 0xFF, 0x03, 0xC0, 0xFF, 0x0F, 0xF0, 0xFF, 0x03, 0xC0, 0xFF, 0x0F, 
   0x30, 0x00, 0x02, 0x40, 0x00, 0x0C, 0x30, 0x40, 0x02, 0x40, 0x02, 0x0C, 
   0x30, 0x40, 0x02, 0x40, 0x02, 0x0C, 0x30, 0x00, 0x02, 0x40, 0x00, 0x0C, 
-  0x30, 0x00, 0x03, 0xC0, 0x00, 0x0C, 0xF0, 0xFF, 0x03, 0xC0, 0xFF, 0x0F,
+  0x30, 0x00, 0x03, 0xC0, 0x00, 0x0C, 0xF0, 0xFF, 0x03, 0xC0, 0xFF, 0x0F, 
 };
 
 void drawDiamondHands() {
@@ -78,19 +78,19 @@ void drawRow(int row, const char* title, float value) {
   display.drawString(DISPLAY_WIDTH, offset, buffer);
 }
 
-bool update() {
+void update() {
   drawDiamondHands();
 
   if (!https.begin(*client, endpoint)) {
     Serial.println("Failed to begin API request");
-    return false;
+    return;
   }
 
   int status = https.GET();
   if (status != HTTP_CODE_OK) {
     Serial.print("API request failed: ");
     Serial.println(status);
-    return false;
+    return;
   }
 
   String body = https.getString();
@@ -101,7 +101,7 @@ bool update() {
   if (error) {
     Serial.println("Failed to deseiralice JSON:");
     Serial.println(body);
-    return false;
+    return;
   }
 
   Serial.println("Response: ");
@@ -116,11 +116,11 @@ bool update() {
         drawRow(i, values[i].title, item[values[i].key]);
       }
       display.display();
-      return true;
+      return;
     }
   }
 
-  return false;
+  return;
 }
 
 void setup() {
@@ -133,9 +133,7 @@ void setup() {
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
-    if (!update()) {
-      drawDiamondHands();
-    }
+    update();
     delay(INTERVAL);
   } else {
     drawDiamondHands();
