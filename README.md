@@ -1,5 +1,5 @@
 # StockPriceFetcher
-Fetch stock price by symbol and exchange using ESP8266.
+Fetch stock price by symbol using ESP8266.
 
 <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
 
